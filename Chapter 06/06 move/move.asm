@@ -11,10 +11,10 @@ section .text
 	global main
 main:
 	push rbp
-	mov rbp,rsp
+	mov rbp, rsp
 	mov rax, -1					; fill rax with 1s
 	mov al, byte [bNum]     	; does NOT clear upper bits of rax
-        xor rax,rax				; clear rax
+        xor rax, rax				; clear rax
         mov al, byte [bNum]		; now rax contains the correct value
 
         mov rax, -1				; fill rax with 1s

@@ -1,11 +1,11 @@
 ; hello.asm
-section .data					
-    msg	db      "hello, world",0			
-section .bss							
-section .text							
-    global main					
+section .data
+    msg	db      "hello, world",0
+section .bss
+section .text
+    global main
 main:
-						 
+
 	mov     rax, 1		; 1 = write	
     mov     rdi, 1		; 1 = to stdout		
     mov     rsi, msg	; string to display in rsi
