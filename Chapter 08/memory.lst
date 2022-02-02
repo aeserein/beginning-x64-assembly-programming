@@ -1,0 +1,47 @@
+     1                                  ; memory.asm
+     2                                  
+     3                                  section .data
+     4 00000000 7B                          bNum db 123
+     5 00000001 3930                        wNum dw 12345
+     6 00000003 0000<rep 5h>                warray times 5 dw 0	; array of 5 double words containing 0
+     7 0000000D 39300000                    dNum dd 12345
+     8 00000011 3930000000000000            qNum1 dq 12345
+     9 00000019 61626300                    text1 db "abc",0
+    10 0000001D 50455254FB210940            qNum2 dq  3.141592654
+    11 00000025 63646500                    text2 db "cde",0
+    12                                  section .bss
+    13 00000000 ??                          bvar resb	1
+    14 00000001 ????????                    dvar resd	1
+    15 00000005 <res 14h>                   wvar	resw	10
+    16 00000019 <res 3A980h>                qvar resq	30000
+    17                                  
+    18                                  section .text
+    19                                      global main
+    20                                  main:
+    21                                      ;mov rbp, rsp           ;for correct debugging
+    22 00000000 55                          push rbp
+    23 00000001 4889E5                      mov rbp,rsp
+    24 00000004 488D0425[00000000]          lea rax, [bNum]	;load address of bNum in rax
+    25 0000000C 48B8-                       mov rax, bNum		;load address of bNum in rax
+    25 0000000E [0000000000000000] 
+    26 00000016 488B0425[00000000]          mov rax, [bNum]	;load value at bNum in rax
+    27 0000001E 4831C0                      XOR RAX, RAX            ; Pongo RAX todo en 0
+    28 00000021 8A0425[00000000]            MOV AL, [bNum]          ; Pongo bNum en un registro del tamaño correcto
+    29 00000028 48890425[00000000]          mov [bvar], rax	;load value in rax in at address bvar
+    30                                                              ; Esto trunca RAX a solo el primer byte porque bvar mide mide un byte
+    31 00000030 880425[00000000]            MOV [bvar], AL          ; Acá se pone solo los 8 bytes inferiores de RAX que sí entran en bvar
+    32                                                              ; En este caso debería comportarse igual
+    33 00000037 488D0425[00000000]          lea rax, [bvar]	;load address of bvar in rax
+    34 0000003F 488D0425[01000000]          lea rax, [wNum]	;load address of wNum in rax
+    35 00000047 488B0425[01000000]          mov rax, [wNum]	;load content of wNum in rax
+    36 0000004F 488D0425[19000000]          lea rax, [text1]	;load address of text1 in rax
+    37 00000057 48B8-                       mov rax, text1		;load address of text1 in rax
+    37 00000059 [1900000000000000] 
+    38 00000061 48B8-                       mov rax, text1+1	;load address second character in rax
+    38 00000063 [1A00000000000000] 
+    39 0000006B 488D0425[1A000000]          lea rax, [text1+1]	;load address second character in rax
+    40 00000073 488B0425[19000000]          mov rax, [text1]	;load content starting at text1 in rax	
+    41 0000007B 488B0425[1A000000]          mov rax, [text1+1]	;load content starting at text1+1 in rax
+    42 00000083 4889EC                      mov rsp,rbp
+    43 00000086 5D                          pop rbp
+    44 00000087 C3                      ret
